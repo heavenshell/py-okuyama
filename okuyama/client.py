@@ -131,7 +131,12 @@ class CommandInterface(object):
 
             socket.send(to_bytes(command))
 
-            ret = socket.recv(4096)
+            ret = ''
+            while True:
+                buf = socket.recv(4096)
+                ret += buf
+                if '\n' in buf:
+                    break
 
             self.logger.debug(to_unicode(ret).replace('\n', '\\n'))
 
