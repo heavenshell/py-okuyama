@@ -3,6 +3,8 @@ okuyama
 
 Distributed key-value-store okuyama's Python client.
 
+.. image:: https://travis-ci.org/heavenshell/py-okuyama.svg?branch=master
+
 Usage
 -----
 
