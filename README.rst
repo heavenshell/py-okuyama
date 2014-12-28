@@ -23,9 +23,6 @@ Set value
 .. code:: python
 
   print(client.set('key', 'val')) # => True
-
-.. code:: python
-
   print(client.get('key')) # => 'val'
 
 Remove value
