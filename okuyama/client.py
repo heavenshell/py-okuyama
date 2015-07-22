@@ -15,6 +15,7 @@ import re
 import socket
 import logging
 import argparse
+import random
 from base64 import b64encode, b64decode
 
 __version__ = '0.0.1'
@@ -468,7 +469,8 @@ class Client(object):
         :param address: okuyama MasterNode Addresses
         """
         if isinstance(addresses, list):
-            pass
+            #: Access to MasterNode by random.
+            random.shuffle(addresses)
         elif isinstance(addresses, str):
             address = [addresses]
         elif isinstance(addresses, unicode):
@@ -480,6 +482,7 @@ class Client(object):
             if validate_host_format(address) is False:
                 continue
 
+            self.logger.info('Connecting to %s', address)
             sock = self.connect(address)
             if sock is not None:
                 self.socket = sock
