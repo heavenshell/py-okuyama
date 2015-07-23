@@ -1,5 +1,5 @@
-Copyright (c) 2014, Kobe Digital Labo, Inc. 
-Copyright (c) 2014, Shinya Ohyanagi.
+Copyright (c) 2014-2015, Kobe Digital Labo, Inc.
+Copyright (c) 2014-2015, Shinya Ohyanagi.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
