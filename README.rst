@@ -1,5 +1,6 @@
 okuyama
 =======
+
 .. image:: https://travis-ci.org/heavenshell/py-okuyama.svg?branch=master
 
 Distributed key-value-store okuyama's Python client.
