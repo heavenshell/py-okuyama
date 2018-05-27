@@ -20,10 +20,10 @@ with open(rst, 'r') as f:
 
 setup(
     name=app_name,
-    version='0.0.1',
+    version='1.0.0',
     author='Shinya Ohyanagi',
-    author_email='ohyanagi@kdl.co.jp',
-    url='http://github.com/kobedigitallabo/py-okuyama',
+    author_email='sohyanagi@gmail.com',
+    url='http://github.com/heavenshell/py-okuyama',
     description=description,
     long_description=description,
     license='BSD',
@@ -38,8 +38,8 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Topic :: Database'
+        'Topic :: Database',
     ],
     tests_require=['mock>=1.0.0'],
-    test_suite='tests'
+    test_suite='tests',
 )

@@ -29,26 +29,26 @@ HOST_PATTERN = re.compile('^[a-zA-Z\d\.\-\_]+[:][0-9]+$', re.IGNORECASE)
 see https://github.com/mitsuhiko/werkzeug/blob/master/werkzeug/_compat.py
 """
 if PY2:
-    text_type = unicode
+    text_type = unicode  # noqa F821
 
-    iterkeys = lambda d: d.iterkeys()
-    itervalues = lambda d: d.itervalues()
-    iteritems = lambda d: d.iteritems()
+    iterkeys = lambda d: d.iterkeys()  # noqa E731
+    itervalues = lambda d: d.itervalues()  # noqa E731
+    iteritems = lambda d: d.iteritems()  # noqa E731
 
     def to_bytes(x, charset=sys.getdefaultencoding(), errors='strict'):
         if x is None:
             return None
-        if isinstance(x, (bytes, bytearray, buffer)):
+        if isinstance(x, (bytes, bytearray, buffer)):  # noqa F821
             return bytes(x)
-        if isinstance(x, unicode):
+        if isinstance(x, unicode):  # noqa F821
             return x.encode(charset, errors)
         raise TypeError('Expected bytes')
 else:
     text_type = str
 
-    iterkeys = lambda d: iter(d.keys())
-    itervalues = lambda d: iter(d.values())
-    iteritems = lambda d: iter(d.items())
+    iterkeys = lambda d: iter(d.keys())  # noqa E731
+    itervalues = lambda d: iter(d.values())  # noqa E731
+    iteritems = lambda d: iter(d.items())  # noqa E731
 
     def to_bytes(x, charset=sys.getdefaultencoding(), errors='strict'):
         if x is None:
@@ -60,8 +60,7 @@ else:
         raise TypeError('Expected bytes')
 
 
-def to_unicode(x, charset=sys.getdefaultencoding(), errors='strict',
-               allow_none_charset=False):
+def to_unicode(x, charset=sys.getdefaultencoding(), errors='strict', allow_none_charset=False):
     """Copied from `werkzuig._compat.py`.
 
     see https://github.com/mitsuhiko/werkzeug/blob/master/werkzeug/_compat.py
@@ -109,7 +108,7 @@ class CommandInterface(object):
         """Parse response from okuyama.
 
         :param data: okuyama raw data
-        :param id: Proccess id
+        :param id: Process id
         """
         responses = to_unicode(data).split(self.constants.DATA_DELIMITER)
         if responses[0] == id:
@@ -160,8 +159,11 @@ class GetCommand(CommandInterface):
         key = kwargs['key']
         mode = self.id if self.id is not None else self.constants.ID_GET
 
-        command = '{0}{1}{2}\n'.format(mode, self.constants.DATA_DELIMITER,
-                                       to_unicode(b64encode(to_bytes(key))))
+        command = '{0}{1}{2}\n'.format(
+            mode,
+            self.constants.DATA_DELIMITER,
+            to_unicode(b64encode(to_bytes(key))),
+        )
         self.logger.debug(command)
 
         return command
@@ -214,9 +216,11 @@ class SetCommand(CommandInterface):
 
         value = to_unicode(b64encode(to_bytes(value)))
 
-        command = '{0}{1}{2}{3}'.format(mode, self.constants.DATA_DELIMITER,
-                                        to_unicode(b64encode(to_bytes(key))),
-                                        self.constants.DATA_DELIMITER)
+        command = '{0}{1}{2}{3}'.format(
+            mode, self.constants.DATA_DELIMITER,
+            to_unicode(b64encode(to_bytes(key))),
+            self.constants.DATA_DELIMITER,
+        )
 
         if tags is None:
             command += self.constants.BLANK_STRING
@@ -273,11 +277,13 @@ class DeleteCommand(CommandInterface):
 
         mode = self.id if self.id is not None else self.constants.ID_REMOVE
         key = to_unicode(b64encode(to_bytes(key)))
-        command = '{0}{1}{2}{3}{4}\n'.format(mode,
-                                             self.constants.DATA_DELIMITER,
-                                             key,
-                                             self.constants.DATA_DELIMITER,
-                                             self.constants.TRANSACTION_CODE)
+        command = '{0}{1}{2}{3}{4}\n'.format(
+            mode,
+            self.constants.DATA_DELIMITER,
+            key,
+            self.constants.DATA_DELIMITER,
+            self.constants.TRANSACTION_CODE,
+        )
         return command
 
     def parse(self, response):
@@ -419,8 +425,7 @@ class Client(object):
         """
         self.socket = None
         if logger is None:
-            logging.basicConfig(level=logging.INFO,
-                                format=self.debug_log_format)
+            logging.basicConfig(level=logging.INFO, format=self.debug_log_format)
             logger = logging.getLogger('okuyama')
 
         self.logger = logger
@@ -473,7 +478,7 @@ class Client(object):
             random.shuffle(addresses)
         elif isinstance(addresses, str):
             address = [addresses]
-        elif isinstance(addresses, unicode):
+        elif isinstance(addresses, unicode):  # noqa F821
             address = [addresses]
 
         sock = None
@@ -525,8 +530,7 @@ class Client(object):
         :param key: Key
         :param value: Value
         """
-        response = self.execute('set', key=key, value=value,
-                                tags=tags, version=version)
+        response = self.execute('set', key=key, value=value, tags=tags, version=version)
 
         return response
 
@@ -570,18 +574,35 @@ def parse_options():
     """
     description = 'Distributed KVS okuyama Python client.'
     parser = argparse.ArgumentParser(description=description, add_help=False)
-    parser.add_argument('-h', '--host', default='127.0.0.1',
-                        help='okuyama master node address.')
-    parser.add_argument('-p', '--port', default=8888, type=int,
-                        help='okuyama master node port.')
+    parser.add_argument(
+        '-h',
+        '--host',
+        default='127.0.0.1',
+        help='okuyama master node address.',
+    )
+    parser.add_argument(
+        '-p',
+        '--port',
+        default=8888,
+        type=int,
+        help='okuyama master node port.',
+    )
     parser.add_argument('-k', '--key', help='key')
     parser.add_argument('-v', '--value', help='value')
     parser.add_argument('-d', '--delete', help='delete')
     parser.add_argument('-t', '--tags')
-    parser.add_argument('-c', '--count', type=int, default=1,
-                        help='Number of loop count.')
-    parser.add_argument('--version', action='version',
-                        version='okuyama client {0}'.format(__version__))
+    parser.add_argument(
+        '-c',
+        '--count',
+        type=int,
+        default=1,
+        help='Number of loop count.',
+    )
+    parser.add_argument(
+        '--version',
+        action='version',
+        version='okuyama client {0}'.format(__version__),
+    )
 
     args = parser.parse_args()
 
@@ -606,6 +627,7 @@ def main():
             logger.info(client.set(args.key, args.value, tags))
     else:
         logger.info(client.get(args.key))
+
 
 if __name__ == '__main__':
     main()

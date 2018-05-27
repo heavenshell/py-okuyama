@@ -4,7 +4,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from okuyama.client import Client
+from okuyama.client import Client  # noqa E402
 
 
 def main():
@@ -26,8 +26,7 @@ def main():
 
     #: Set data with tags.
     for i in range(100):
-        c.set(key='foo_key_{0}'.format(i), value='foo_{0}'.format(i),
-              tags='foo')
+        c.set(key='foo_key_{0}'.format(i), value='foo_{0}'.format(i), tags='foo')
 
     #: Get key and delete data.
     keys = c.execute('get_keys_by_tag', tag='foo')
@@ -35,8 +34,7 @@ def main():
         c.execute('delete', key=k)
 
     for i in range(100):
-        c.set(key='foo_key_{0}'.format(i), value='foo_{0}'.format(i),
-              tags=['foo', 'bar'])
+        c.set(key='foo_key_{0}'.format(i), value='foo_{0}'.format(i), tags=['foo', 'bar'])
 
     keys = c.execute('get_keys_by_tag', tag='foo')
     print(keys)
