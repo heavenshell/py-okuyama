@@ -24,7 +24,7 @@ setup(
     author='Shinya Ohyanagi',
     author_email='sohyanagi@gmail.com',
     url='http://github.com/heavenshell/py-okuyama',
-    description=description,
+    description='Python client for Distributed KVS okuyama',
     long_description=description,
     license='BSD',
     platforms='any',
